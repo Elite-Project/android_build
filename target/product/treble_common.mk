@@ -40,11 +40,6 @@ PRODUCT_COPY_FILES += \
     frameworks/av/services/audiopolicy/config/audio_policy_volumes.xml:system/etc/audio_policy_volumes.xml \
     frameworks/av/services/audiopolicy/config/default_volume_tables.xml:system/etc/default_volume_tables.xml \
 
-# Telephony:
-#   Provide a default APN configuration
-PRODUCT_COPY_FILES += \
-    device/generic/goldfish/data/etc/apns-conf.xml:system/etc/apns-conf.xml
-
 # Support for the O-MR1 devices
 PRODUCT_COPY_FILES += \
     build/make/target/product/vndk/init.gsi.rc:system/etc/init/init.gsi.rc \
