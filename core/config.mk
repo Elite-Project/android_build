@@ -1089,3 +1089,5 @@ endif
 include $(BUILD_SYSTEM)/dumpvar.mk
 # Include any vendor specific config.mk file
 -include vendor/*/build/core/config.mk
+
+BUILD_RRO_SYSTEM_PACKAGE := $(BUILD_SYSTEM)/system_rro.mk
