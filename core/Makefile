@@ -1,5 +1,17 @@
 # Put some miscellaneous rules here
 
+# Build system colors
+
+ifneq ($(BUILD_WITH_COLORS),0)
+  CL_RED="\033[31m"
+  CL_GRN="\033[32m"
+  CL_YLW="\033[33m"
+  CL_BLU="\033[34m"
+  CL_MAG="\033[35m"
+  CL_CYN="\033[36m"
+  CL_RST="\033[0m"
+endif
+
 # HACK: clear LOCAL_PATH from including last build target before calling
 # intermedites-dir-for
 LOCAL_PATH := $(BUILD_SYSTEM)
@@ -3055,8 +3067,18 @@ TARGET_PACKAGE := $(PRODUCT_OUT)/$(ELITE_VERSION).zip
 .PHONY: otapackage bacon
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-        $(hide) $(MD5SUM) $(ELITE_TARGET_PACKAGE) > $(ELITE_TARGET_PACKAGE).md5sum
-	@echo "Package Complete: $(ELITE_TARGET_PACKAGE)"
+bacon: elite
+elite: otapackage
+	$(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(TARGET_PACKAGE) > $(TARGET_PACKAGE).md5sum
+	@echo " "
+	@echo " "
+	@echo -e ${CL_BLD}${CL_RED}"=============================== Package complete ==============================="
+	@echo -e ${CL_BLD}${CL_YLW}"Zip: `realpath --relative-to='${PWD}' '$(TARGET_PACKAGE)'`"
+	@echo -e ${CL_BLD}${CL_YLW}"MD5: `cat $(TARGET_PACKAGE).md5sum | awk '{print $$1}' `"
+	@echo -e ${CL_BLD}${CL_YLW}"Size: `du -sh $(TARGET_PACKAGE) | awk '{print $$1}' `"
+	@echo -e ${CL_BLD}${CL_RED}"================================================================================" ${CL_RST}
+	@rm -rf $(INTERNAL_OTA_PACKAGE_TARGET)
 
 endif    # build_ota_package
 
