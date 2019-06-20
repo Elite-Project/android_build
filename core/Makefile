@@ -3012,7 +3012,7 @@ endif
 ifeq ($(WITH_GMS),true)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
 else
-ifneq ($(PA_BUILD),)
+ifneq ($(ELITE_BUILD),)
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := true
 else
     $(INTERNAL_OTA_PACKAGE_TARGET): backuptool := false
@@ -3033,13 +3033,16 @@ $(INTERNAL_OTA_PACKAGE_TARGET): $(BUILT_TARGET_FILES_PACKAGE) \
 	   $(if $(OEM_OTA_CONFIG), -o $(OEM_OTA_CONFIG)) \
 	   $(BUILT_TARGET_FILES_PACKAGE) $@
 
-PA_TARGET_PACKAGE := $(PRODUCT_OUT)/$(TARGET_PRODUCT)-$(ROM_VERSION).zip
+ELITE_TARGET_PACKAGE := $(PRODUCT_OUT)/$(ELITE_VERSION).zip
 
-.PHONY: otapackage bacon
+.PHONY: otapackage bacon elite
 otapackage: $(INTERNAL_OTA_PACKAGE_TARGET)
 bacon: otapackage
-	$(hide) $(MD5SUM) $(PA_TARGET_PACKAGE) > $(PA_TARGET_PACKAGE).md5sum
-	@echo "Package Complete: $(PA_TARGET_PACKAGE)"
+bacon: elite
+elite: otapackage
+        $(hide) ln -f $(INTERNAL_OTA_PACKAGE_TARGET) $(ELITE_TARGET_PACKAGE)
+	$(hide) $(MD5SUM) $(ELITE_TARGET_PACKAGE) > $(ELITE_TARGET_PACKAGE).md5sum
+	@echo "Package Complete: $(ELITE_TARGET_PACKAGE)"
 
 endif    # build_ota_package
 
